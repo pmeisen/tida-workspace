@@ -9,6 +9,7 @@
       <module fileurl="file://$PROJECT_DIR$/../gen-misc/gen-misc.iml" filepath="$PROJECT_DIR$/../gen-misc/gen-misc.iml" />
       <module fileurl="file://$PROJECT_DIR$/../gen-sbconfigurator/gen-sbconfigurator.iml" filepath="$PROJECT_DIR$/../gen-sbconfigurator/gen-sbconfigurator.iml" />
       <module fileurl="file://$PROJECT_DIR$/../gen-server/gen-server.iml" filepath="$PROJECT_DIR$/../gen-server/gen-server.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../gen-server-http-listener/gen-server-http-listener.iml" filepath="$PROJECT_DIR$/../gen-server-http-listener/gen-server-http-listener.iml" />
       <module fileurl="file://$PROJECT_DIR$/tida-workspace.iml" filepath="$PROJECT_DIR$/tida-workspace.iml" />
     </modules>
   </component>

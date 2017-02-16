@@ -8,6 +8,7 @@
     <mapping directory="$PROJECT_DIR$/../gen-misc" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/../gen-sbconfigurator" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/../gen-server" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/../gen-server-http-listener" vcs="Git" />
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
   </component>
 </project>
