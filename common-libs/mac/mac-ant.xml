@@ -1,0 +1,38 @@
+<project name="mac-ant">
+    <dirname property="ant.dir.mac-ant" file="${ant.file.mac-ant}"/>
+
+    <taskdef resource="net/sf/antcontrib/antcontrib.properties">
+        <classpath>
+            <fileset dir="${ant.dir.mac-ant}/../ant-contrib">
+                <include name="**/*.jar"/>
+            </fileset>
+            <fileset dir="${ant.dir.mac-ant}/../ant-contrib/lib">
+                <include name="**/*.jar"/>
+            </fileset>
+        </classpath>
+    </taskdef>
+
+    <macrodef name="sudo">
+
+        <sequential>
+            <exec executable="/bin/sh" resultproperty="tmp.result" outputproperty="tmp.output">
+                <arg value="-c"/>
+                <arg value="sudo -l"/>
+            </exec>
+
+            <if>
+                <not>
+                    <equals arg1="0" arg2="${tmp.result}"/>
+                </not>
+                <then>
+                    <input message="Please enter the sudo password to start the dev-env" addproperty="tmp.sudo.pwd"/>
+
+                    <exec executable="/bin/sh" failonerror="true" resultproperty="tmp.result">
+                        <arg value="-c"/>
+                        <arg value="echo '${tmp.sudo.pwd}' | sudo -S -l"/>
+                    </exec>
+                </then>
+            </if>
+        </sequential>
+    </macrodef>
+</project>

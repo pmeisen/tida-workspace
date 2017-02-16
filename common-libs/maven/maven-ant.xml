@@ -1,0 +1,95 @@
+<project name="maven-ant" xmlns:artifact="antlib:org.apache.maven.artifact.ant">
+    <dirname property="ant.dir.maven-ant" file="${ant.file.maven-ant}"/>
+
+    <taskdef resource="org/apache/maven/artifact/ant/antlib.xml">
+        <classpath>
+            <fileset dir="${ant.dir.maven-ant}">
+                <include name="**/*.jar"/>
+            </fileset>
+        </classpath>
+    </taskdef>
+
+    <taskdef resource="net/sf/antcontrib/antcontrib.properties">
+        <classpath>
+            <fileset dir="${ant.dir.maven-ant}/../ant-contrib">
+                <include name="**/*.jar"/>
+            </fileset>
+            <fileset dir="${ant.dir.maven-ant}/../ant-contrib/lib">
+                <include name="**/*.jar"/>
+            </fileset>
+        </classpath>
+    </taskdef>
+
+    <path id="project.maven-ant-tasks.classpath" path="${ant.dir.maven-ant}/maven-ant-tasks-2.1.3.jar"/>
+    <typedef resource="org/apache/maven/artifact/ant/antlib.xml" uri="antlib:org.apache.maven.artifact.ant"
+             classpathref="project.maven-ant-tasks.classpath"/>
+
+    <macrodef name="mavenCopyDependencies">
+        <attribute name="dir" default="."/>
+        <attribute name="scope" default="compile"/>
+        <attribute name="pom" default="pom.xml"/>
+
+        <sequential>
+            <mkdir dir="@{dir}"/>
+
+            <artifact:pom id="project.tmp.pom" file="@{pom}"/>
+            <artifact:dependencies filesetId="project.tmp.dependencies" useScope="@{scope}" pomRefId="project.tmp.pom"
+                                   settingsFile="${ant.dir.maven-ant}/settings.xml"/>
+
+            <copy todir="@{dir}">
+                <fileset refid="project.tmp.dependencies"/>
+                <mapper type="flatten"/>
+            </copy>
+        </sequential>
+    </macrodef>
+
+    <macrodef name="mavenCopyTestDependencies">
+        <attribute name="dir" default="."/>
+        <attribute name="pom" default="pom.xml"/>
+
+        <sequential>
+            <mkdir dir="@{dir}"/>
+
+            <artifact:pom id="project.tmp.pom" file="@{pom}"/>
+            <artifact:dependencies filesetId="project.tmp.dependencies" scopes="test" pomRefId="project.tmp.pom"
+                                   settingsFile="${ant.dir.maven-ant}/settings.xml"/>
+
+            <copy todir="@{dir}">
+                <fileset refid="project.tmp.dependencies"/>
+                <mapper type="flatten"/>
+            </copy>
+        </sequential>
+    </macrodef>
+
+    <macrodef name="mavenDeploy">
+        <attribute name="file"/>
+        <attribute name="pom" default="pom.xml"/>
+        <attribute name="local" default="true"/>
+
+        <sequential>
+            <artifact:pom id="project.tmp.pom" file="@{pom}"/>
+
+            <if>
+                <and>
+                    <not>
+                        <equals arg1="@{local}" arg2="true" casesensitive="false" trim="true"/>
+                    </not>
+                    <socket server="development.breinify.com" port="80"/>
+                </and>
+                <then>
+                    <artifact:deploy settingsFile="${ant.dir.maven-ant}/settings.xml" uniqueVersion="false"
+                                     file="@{file}">
+                        <remoteRepository id="breinifyOverall"
+                                          url="http://development.breinify.com/artifactory/snapshots"/>
+                        <pom refid="project.tmp.pom"/>
+                    </artifact:deploy>
+                </then>
+                <else>
+                    <artifact:install settingsFile="${ant.dir.maven-ant}/settings.xml" file="@{file}">
+                        <pom refid="project.tmp.pom"/>
+                    </artifact:install>
+                </else>
+            </if>
+        </sequential>
+    </macrodef>
+</project>

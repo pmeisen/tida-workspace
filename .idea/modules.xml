@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/../dis-timeintervaldataanalyzer/dis-timeintervaldataanalyzer.iml" filepath="$PROJECT_DIR$/../dis-timeintervaldataanalyzer/dis-timeintervaldataanalyzer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../dis-timeintervaldataanalyzer-jdbc/dis-timeintervaldataanalyzer-jdbc.iml" filepath="$PROJECT_DIR$/../dis-timeintervaldataanalyzer-jdbc/dis-timeintervaldataanalyzer-jdbc.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../dis-timeintervaldataanalyzer-ui2/dis-timeintervaldataanalyzer-ui2.iml" filepath="$PROJECT_DIR$/../dis-timeintervaldataanalyzer-ui2/dis-timeintervaldataanalyzer-ui2.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../gen-dummy/gen-dummy.iml" filepath="$PROJECT_DIR$/../gen-dummy/gen-dummy.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../gen-misc/gen-misc.iml" filepath="$PROJECT_DIR$/../gen-misc/gen-misc.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../gen-sbconfigurator/gen-sbconfigurator.iml" filepath="$PROJECT_DIR$/../gen-sbconfigurator/gen-sbconfigurator.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../gen-server/gen-server.iml" filepath="$PROJECT_DIR$/../gen-server/gen-server.iml" />
+      <module fileurl="file://$PROJECT_DIR$/tida-workspace.iml" filepath="$PROJECT_DIR$/tida-workspace.iml" />
+    </modules>
+  </component>
+</project>

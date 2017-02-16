@@ -1,0 +1,274 @@
+<project name="util-ant">
+    <dirname property="ant.dir.util-ant" file="${ant.file.util-ant}"/>
+
+    <include file="${ant.dir.util-ant}/../maven/maven-ant.xml"/>
+    <include file="${ant.dir.util-ant}/../mac/mac-ant.xml"/>
+
+    <taskdef resource="net/sf/antcontrib/antlib.xml">
+        <classpath>
+            <fileset dir="${ant.dir.util-ant}/../ant-contrib">
+                <include name="**/*.jar"/>
+            </fileset>
+            <fileset dir="${ant.dir.util-ant}/../ant-contrib/lib">
+                <include name="**/*.jar"/>
+            </fileset>
+        </classpath>
+    </taskdef>
+
+    <macrodef name="resolve-dependencies">
+        <attribute name="lib" default="lib"/>
+        <attribute name="testLib" default="testLib"/>
+
+        <sequential>
+            <delete dir="@{lib}" failonerror="false"/>
+            <mavenCopyDependencies dir="@{lib}"/>
+
+            <delete dir="@{testLib}" failonerror="false"/>
+            <mavenCopyTestDependencies dir="@{testLib}"/>
+        </sequential>
+    </macrodef>
+
+    <macrodef name="do-compile">
+        <attribute name="src"/>
+        <attribute name="target"/>
+        <attribute name="useAspectJ" default="false"/>
+        <attribute name="copyNonJavaFiles" default="true"/>
+
+        <element name="fs"/>
+
+        <sequential>
+            <delete failonerror="false">
+                <fileset dir="@{target}" includes="**/*"/>
+            </delete>
+            <mkdir dir="@{target}"/>
+
+            <if>
+                <equals arg1="@{useAspectJ}" arg2="true" casesensitive="false" trim="true"/>
+                <then>
+                    <iajc srcdir="@{src}" destdir="@{target}" Xlint="ignore" debug="false" outxml="false" source="1.8"
+                          target="1.8" encoding="UTF-8">
+                        <classpath>
+                            <fs/>
+                        </classpath>
+                    </iajc>
+                </then>
+                <else>
+                    <javac srcdir="@{src}" destdir="@{target}" includeantruntime="false" debug="true" source="1.8"
+                           target="1.8" encoding="UTF-8">
+                        <classpath>
+                            <fs/>
+                        </classpath>
+                    </javac>
+                </else>
+            </if>
+
+            <if>
+                <equals arg1="@{copyNonJavaFiles}" arg2="true" casesensitive="false" trim="true" />
+                <then>
+                    <copy todir="@{target}" includeEmptyDirs="false">
+                        <fileset dir="@{src}">
+                            <exclude name="**/*.java"/>
+                            <exclude name="**/*.db.backup"/>
+                        </fileset>
+                    </copy>
+                </then>
+            </if>
+        </sequential>
+    </macrodef>
+
+    <macrodef name="do-run-test-suite">
+        <attribute name="testSuite"/>
+        <attribute name="src" default="src"/>
+        <attribute name="testSrc" default="test"/>
+        <attribute name="target" default="target"/>
+        <attribute name="testTarget" default="testTarget"/>
+        <attribute name="resources" default="resources"/>
+        <attribute name="testResources" default="testResources"/>
+        <attribute name="useAspectJ" default="false"/>
+        <attribute name="rebuildSrc" default="false"/>
+        <attribute name="rebuildTest" default="true"/>
+        <attribute name="projectType" default="java-default"/>
+
+        <element name="fs" optional="true"/>
+
+        <sequential>
+
+            <if>
+            <equals arg1="@{projectType}" arg2="java-default" casesensitive="false" trim="true"/>
+            <then>
+                <var name="tmpDependencyLibFolder" value="lib"/>
+            </then>
+            <elseif>
+                <equals arg1="@{projectType}" arg2="java-web" casesensitive="false" trim="true"/>
+                <then>
+                    <var name="tmpDependencyLibFolder" value="webApplication/WEB-INF/lib"/>
+                </then>
+            </elseif>
+            <else>
+                <fail>Unsupported project-type: @{projectType}</fail>
+            </else>
+            </if>
+
+            <if>
+                <equals arg1="@{rebuildSrc}" arg2="true" casesensitive="false" trim="true"/>
+                <then>
+                    <if>
+                        <equals arg1="@{projectType}" arg2="java-default" casesensitive="false" trim="true"/>
+                        <then>
+                            <do-compile-java-default src="@{src}" target="@{target}" useAspectJ="@{useAspectJ}"/>
+                        </then>
+                        <elseif>
+                            <equals arg1="@{projectType}" arg2="java-web" casesensitive="false" trim="true"/>
+                            <then>
+                                <do-compile-java-web src="@{src}" target="@{target}" useAspectJ="@{useAspectJ}"/>
+                            </then>
+                        </elseif>
+                    </if>
+                </then>
+            </if>
+
+            <if>
+                <equals arg1="@{rebuildTest}" arg2="true" casesensitive="false" trim="true"/>
+                <then>
+
+                    <if>
+                        <equals arg1="@{projectType}" arg2="java-default" casesensitive="false" trim="true"/>
+                        <then>
+                            <do-compile-java-default src="@{testSrc}" target="@{testTarget}" useAspectJ="@{useAspectJ}">
+                                <additionalFs>
+                                    <pathelement path="@{target}"/>
+
+                                    <fileset dir="testLib" casesensitive="yes">
+                                        <include name="**/*.jar"/>
+                                    </fileset>
+
+                                    <fs/>
+                                </additionalFs>
+                            </do-compile-java-default>
+                        </then>
+                        <elseif>
+                            <equals arg1="@{projectType}" arg2="java-web" casesensitive="false" trim="true"/>
+                            <then>
+                                <do-compile-java-web src="@{testSrc}" target="@{testTarget}" useAspectJ="@{useAspectJ}">
+                                    <additionalFs>
+                                        <pathelement path="@{target}"/>
+
+                                        <fileset dir="testLib" casesensitive="yes">
+                                            <include name="**/*.jar"/>
+                                        </fileset>
+
+                                        <fs/>
+                                    </additionalFs>
+                                </do-compile-java-web>
+                            </then>
+                        </elseif>
+                    </if>
+                </then>
+            </if>
+
+            <junit printsummary="yes" haltonfailure="yes" fork="yes">
+
+                <classpath>
+                    <pathelement path="@{target}"/>
+                    <pathelement path="@{testTarget}"/>
+                    <pathelement path="@{resources}"/>
+                    <pathelement path="@{testResources}"/>
+
+                    <fileset dir="${tmpDependencyLibFolder}" casesensitive="yes">
+                        <include name="**/*.jar"/>
+                    </fileset>
+                    <fileset dir="testLib" casesensitive="yes">
+                        <include name="**/*.jar"/>
+                    </fileset>
+
+                    <fs/>
+                </classpath>
+
+                <test name="@{testSuite}" todir="test-result" outfile="result">
+                    <formatter type="plain" usefile="false"/>
+                </test>
+            </junit>
+        </sequential>
+    </macrodef>
+
+    <macrodef name="do-compile-java-default">
+        <attribute name="src" default="src"/>
+        <attribute name="target" default="target"/>
+        <attribute name="useAspectJ" default="false"/>
+
+        <element name="additionalFs" optional="true"/>
+
+        <sequential>
+            <do-compile src="@{src}" target="@{target}" useAspectJ="@{useAspectJ}">
+                <fs>
+                    <pathelement path="resources"/>
+                    <fileset dir="lib">
+                        <include name="**/*.jar"/>
+                    </fileset>
+                    <additionalFs/>
+                </fs>
+            </do-compile>
+        </sequential>
+    </macrodef>
+
+    <macrodef name="do-compile-java-web">
+        <attribute name="src" default="src"/>
+        <attribute name="target" default="webApplication/WEB-INF/classes"/>
+        <attribute name="useAspectJ" default="false"/>
+
+        <element name="additionalFs" optional="true"/>
+        <sequential>
+            <do-compile src="@{src}" target="@{target}" useAspectJ="@{useAspectJ}">
+                <fs>
+                    <fileset dir="webApplication/WEB-INF/lib">
+                        <include name="**/*.jar"/>
+                    </fileset>
+                    <fileset dir="@{target}">
+                        <include name="**/*"/>
+                    </fileset>
+                    <fileset dir="../../brein-workspace/brein-intellij-workspace/common-libs/servlet-api">
+                        <include name="**/servlet-api.jar"/>
+                    </fileset>
+                    <additionalFs/>
+                </fs>
+            </do-compile>
+        </sequential>
+    </macrodef>
+
+    <macrodef name="build-jar">
+        <attribute name="jarFile"/>
+        <attribute name="target" default="target"/>
+
+        <sequential>
+            <delete failonerror="false">
+                <fileset dir="@{target}" includes="@{jarFile}"/>
+            </delete>
+
+            <jar jarfile="@{target}/@{jarFile}">
+                <fileset dir="@{target}"/>
+            </jar>
+
+            <mavenDeploy file="@{target}/@{jarFile}"/>
+        </sequential>
+    </macrodef>
+
+    <macrodef name="publish-jar">
+        <attribute name="jarFile"/>
+        <attribute name="jarDir" default="target"/>
+        <attribute name="deleteJar" default="true"/>
+
+        <sequential>
+            <mavenDeploy file="@{jarDir}/@{jarFile}" local="false"/>
+
+            <if>
+                <and>
+                    <available file="@{jarDir}/@{jarFile}"/>
+                    <equals arg1="@{deleteJar}" arg2="true" casesensitive="false" trim="true"/>
+                </and>
+                <then>
+                    <delete file="@{jarDir}/@{jarFile}"/>
+                </then>
+            </if>
+        </sequential>
+    </macrodef>
+</project>

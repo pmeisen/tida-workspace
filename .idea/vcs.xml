@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="VcsDirectoryMappings">
+    <mapping directory="$PROJECT_DIR$/../dis-timeintervaldataanalyzer" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/../dis-timeintervaldataanalyzer-jdbc" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/../dis-timeintervaldataanalyzer-ui2" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/../gen-dummy" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/../gen-misc" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/../gen-sbconfigurator" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/../gen-server" vcs="Git" />
+  </component>
+</project>
