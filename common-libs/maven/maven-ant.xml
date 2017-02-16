@@ -61,6 +61,22 @@
         </sequential>
     </macrodef>
 
+    <macrodef name="mavenAttach">
+        <attribute name="file"/>
+        <attribute name="classifier"/>
+        <attribute name="type" default="jar"/>
+        <attribute name="pom" default="pom.xml"/>
+        <attribute name="local" default="true"/>
+
+        <sequential>
+            <artifact:pom id="project.tmp.pom" file="@{pom}"/>
+            <artifact:install settingsFile="${ant.dir.maven-ant}/settings.xml">
+                <pom refid="project.tmp.pom"/>
+                <artifact:attach file="@{file}" type="@{type}" classifier="@{classifier}"/>
+            </artifact:install>
+        </sequential>
+    </macrodef>
+
     <macrodef name="mavenDeploy">
         <attribute name="file"/>
         <attribute name="pom" default="pom.xml"/>
@@ -68,28 +84,9 @@
 
         <sequential>
             <artifact:pom id="project.tmp.pom" file="@{pom}"/>
-
-            <if>
-                <and>
-                    <not>
-                        <equals arg1="@{local}" arg2="true" casesensitive="false" trim="true"/>
-                    </not>
-                    <socket server="development.breinify.com" port="80"/>
-                </and>
-                <then>
-                    <artifact:deploy settingsFile="${ant.dir.maven-ant}/settings.xml" uniqueVersion="false"
-                                     file="@{file}">
-                        <remoteRepository id="breinifyOverall"
-                                          url="http://development.breinify.com/artifactory/snapshots"/>
-                        <pom refid="project.tmp.pom"/>
-                    </artifact:deploy>
-                </then>
-                <else>
-                    <artifact:install settingsFile="${ant.dir.maven-ant}/settings.xml" file="@{file}">
-                        <pom refid="project.tmp.pom"/>
-                    </artifact:install>
-                </else>
-            </if>
+            <artifact:install settingsFile="${ant.dir.maven-ant}/settings.xml" file="@{file}">
+                <pom refid="project.tmp.pom"/>
+            </artifact:install>
         </sequential>
     </macrodef>
 </project>

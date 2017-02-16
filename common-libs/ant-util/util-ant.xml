@@ -63,7 +63,7 @@
             </if>
 
             <if>
-                <equals arg1="@{copyNonJavaFiles}" arg2="true" casesensitive="false" trim="true" />
+                <equals arg1="@{copyNonJavaFiles}" arg2="true" casesensitive="false" trim="true"/>
                 <then>
                     <copy todir="@{target}" includeEmptyDirs="false">
                         <fileset dir="@{src}">
@@ -93,21 +93,67 @@
         <element name="fs" optional="true"/>
 
         <sequential>
+            <do-compile-test src="@{src}" testSrc="@{testSrc}" target="@{target}" testTarget="@{testTarget}"
+                             resources="@{resources}" testResources="@{testResources}" useAspectJ="@{useAspectJ}"
+                             rebuildSrc="@{rebuildSrc}" rebuildTest="@{rebuildTest}" projectType="@{projectType}">
+                <innerFs>
+                    <fs/>
+                </innerFs>
+            </do-compile-test>
 
+            <junit printsummary="yes" haltonfailure="yes" fork="yes" dir="@{workDir}">
+                <classpath>
+                    <pathelement path="@{target}"/>
+                    <pathelement path="@{testTarget}"/>
+                    <pathelement path="@{resources}"/>
+                    <pathelement path="@{testResources}"/>
+
+                    <fileset dir="${tmpDependencyLibFolder}" casesensitive="yes">
+                        <include name="**/*.jar"/>
+                    </fileset>
+                    <fileset dir="testLib" casesensitive="yes">
+                        <include name="**/*.jar"/>
+                    </fileset>
+
+                    <fs/>
+                </classpath>
+
+                <test name="@{testSuite}" todir="test-result" outfile="result">
+                    <formatter type="plain" usefile="false"/>
+                </test>
+            </junit>
+        </sequential>
+    </macrodef>
+
+    <macrodef name="do-compile-test">
+        <attribute name="src" default="src"/>
+        <attribute name="testSrc" default="test"/>
+        <attribute name="target" default="target"/>
+        <attribute name="testTarget" default="testTarget"/>
+        <attribute name="resources" default="resources"/>
+        <attribute name="testResources" default="testResources"/>
+        <attribute name="useAspectJ" default="false"/>
+        <attribute name="rebuildSrc" default="false"/>
+        <attribute name="rebuildTest" default="true"/>
+        <attribute name="projectType" default="java-default"/>
+
+        <element name="innerFs" optional="true"/>
+
+        <sequential>
             <if>
-            <equals arg1="@{projectType}" arg2="java-default" casesensitive="false" trim="true"/>
-            <then>
-                <var name="tmpDependencyLibFolder" value="lib"/>
-            </then>
-            <elseif>
-                <equals arg1="@{projectType}" arg2="java-web" casesensitive="false" trim="true"/>
+                <equals arg1="@{projectType}" arg2="java-default" casesensitive="false" trim="true"/>
                 <then>
-                    <var name="tmpDependencyLibFolder" value="webApplication/WEB-INF/lib"/>
+                    <var name="tmpDependencyLibFolder" value="lib"/>
                 </then>
-            </elseif>
-            <else>
-                <fail>Unsupported project-type: @{projectType}</fail>
-            </else>
+                <elseif>
+                    <equals arg1="@{projectType}" arg2="java-web" casesensitive="false" trim="true"/>
+                    <then>
+                        <var name="tmpDependencyLibFolder" value="webApplication/WEB-INF/lib"/>
+                    </then>
+                </elseif>
+                <else>
+                    <fail>Unsupported project-type: @{projectType}</fail>
+                </else>
             </if>
 
             <if>
@@ -143,7 +189,7 @@
                                         <include name="**/*.jar"/>
                                     </fileset>
 
-                                    <fs/>
+                                    <innerFs/>
                                 </additionalFs>
                             </do-compile-java-default>
                         </then>
@@ -158,7 +204,7 @@
                                             <include name="**/*.jar"/>
                                         </fileset>
 
-                                        <fs/>
+                                        <innerFs/>
                                     </additionalFs>
                                 </do-compile-java-web>
                             </then>
@@ -166,30 +212,9 @@
                     </if>
                 </then>
             </if>
-
-            <junit printsummary="yes" haltonfailure="yes" fork="yes" dir="@{workDir}">
-                <classpath>
-                    <pathelement path="@{target}"/>
-                    <pathelement path="@{testTarget}"/>
-                    <pathelement path="@{resources}"/>
-                    <pathelement path="@{testResources}"/>
-
-                    <fileset dir="${tmpDependencyLibFolder}" casesensitive="yes">
-                        <include name="**/*.jar"/>
-                    </fileset>
-                    <fileset dir="testLib" casesensitive="yes">
-                        <include name="**/*.jar"/>
-                    </fileset>
-
-                    <fs/>
-                </classpath>
-
-                <test name="@{testSuite}" todir="test-result" outfile="result">
-                    <formatter type="plain" usefile="false"/>
-                </test>
-            </junit>
         </sequential>
     </macrodef>
+
 
     <macrodef name="do-compile-java-default">
         <attribute name="src" default="src"/>
@@ -236,7 +261,7 @@
     </macrodef>
 
     <macrodef name="build-jar">
-        <attribute name="jarFile"/>
+        <attribute name="jarFile" default="${ant.project.name}-TRUNK-SNAPSHOT.jar"/>
         <attribute name="target" default="target"/>
 
         <sequential>
@@ -249,6 +274,42 @@
             </jar>
 
             <mavenDeploy file="@{target}/@{jarFile}"/>
+        </sequential>
+    </macrodef>
+
+    <macrodef name="build-test-jar">
+        <attribute name="jarFile" default="${ant.project.name}-test-TRUNK-SNAPSHOT.jar"/>
+        <attribute name="src" default="src"/>
+        <attribute name="testSrc" default="test"/>
+        <attribute name="target" default="target"/>
+        <attribute name="testTarget" default="testTarget"/>
+        <attribute name="resources" default="resources"/>
+        <attribute name="testResources" default="testResources"/>
+        <attribute name="useAspectJ" default="false"/>
+        <attribute name="rebuildSrc" default="false"/>
+        <attribute name="rebuildTest" default="true"/>
+        <attribute name="projectType" default="java-default"/>
+
+        <element name="fs" optional="true"/>
+
+        <sequential>
+            <do-compile-test src="@{src}" testSrc="@{testSrc}" target="@{target}" testTarget="@{testTarget}"
+                             resources="@{resources}" testResources="@{testResources}" useAspectJ="@{useAspectJ}"
+                             rebuildSrc="@{rebuildSrc}" rebuildTest="@{rebuildTest}" projectType="@{projectType}">
+                <innerFs>
+                    <fs/>
+                </innerFs>
+            </do-compile-test>
+
+            <delete failonerror="false">
+                <fileset dir="@{testTarget}" includes="@{jarFile}"/>
+            </delete>
+
+            <jar jarfile="@{testTarget}/@{jarFile}">
+                <fileset dir="@{testTarget}"/>
+            </jar>
+
+            <mavenAttach file="@{testTarget}/@{jarFile}" classifier="test"/>
         </sequential>
     </macrodef>
 
