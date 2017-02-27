@@ -10,6 +10,9 @@
       <module fileurl="file://$PROJECT_DIR$/../gen-sbconfigurator/gen-sbconfigurator.iml" filepath="$PROJECT_DIR$/../gen-sbconfigurator/gen-sbconfigurator.iml" />
       <module fileurl="file://$PROJECT_DIR$/../gen-server/gen-server.iml" filepath="$PROJECT_DIR$/../gen-server/gen-server.iml" />
       <module fileurl="file://$PROJECT_DIR$/../gen-server-http-listener/gen-server-http-listener.iml" filepath="$PROJECT_DIR$/../gen-server-http-listener/gen-server-http-listener.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../js-gantt/js-gantt.iml" filepath="$PROJECT_DIR$/../js-gantt/js-gantt.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../js-misc/js-misc.iml" filepath="$PROJECT_DIR$/../js-misc/js-misc.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../js-svglibrary/js-svglibrary.iml" filepath="$PROJECT_DIR$/../js-svglibrary/js-svglibrary.iml" />
       <module fileurl="file://$PROJECT_DIR$/tida-workspace.iml" filepath="$PROJECT_DIR$/tida-workspace.iml" />
     </modules>
   </component>
