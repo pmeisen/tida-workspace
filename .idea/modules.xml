@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/../dis-timeintervaldataanalyzer/dis-timeintervaldataanalyzer.iml" filepath="$PROJECT_DIR$/../dis-timeintervaldataanalyzer/dis-timeintervaldataanalyzer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../dis-timeintervaldataanalyzer-assembly/dis-timeintervaldataanalyzer-assembly.iml" filepath="$PROJECT_DIR$/../dis-timeintervaldataanalyzer-assembly/dis-timeintervaldataanalyzer-assembly.iml" />
       <module fileurl="file://$PROJECT_DIR$/../dis-timeintervaldataanalyzer-jdbc/dis-timeintervaldataanalyzer-jdbc.iml" filepath="$PROJECT_DIR$/../dis-timeintervaldataanalyzer-jdbc/dis-timeintervaldataanalyzer-jdbc.iml" />
       <module fileurl="file://$PROJECT_DIR$/../dis-timeintervaldataanalyzer-ui2/dis-timeintervaldataanalyzer-ui2.iml" filepath="$PROJECT_DIR$/../dis-timeintervaldataanalyzer-ui2/dis-timeintervaldataanalyzer-ui2.iml" />
       <module fileurl="file://$PROJECT_DIR$/../gen-dummy/gen-dummy.iml" filepath="$PROJECT_DIR$/../gen-dummy/gen-dummy.iml" />

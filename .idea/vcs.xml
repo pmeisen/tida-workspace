@@ -2,6 +2,7 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$/../dis-timeintervaldataanalyzer" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/../dis-timeintervaldataanalyzer-assembly" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/../dis-timeintervaldataanalyzer-jdbc" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/../dis-timeintervaldataanalyzer-ui2" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/../gen-dummy" vcs="Git" />

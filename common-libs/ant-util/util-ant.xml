@@ -21,9 +21,9 @@
 
         <sequential>
             <delete dir="@{lib}" failonerror="false"/>
-            <mavenCopyDependencies dir="@{lib}"/>
-
             <delete dir="@{testLib}" failonerror="false"/>
+
+            <mavenCopyDependencies dir="@{lib}"/>
             <mavenCopyTestDependencies dir="@{testLib}"/>
         </sequential>
     </macrodef>
@@ -330,6 +330,27 @@
                     <delete file="@{jarDir}/@{jarFile}"/>
                 </then>
             </if>
+        </sequential>
+    </macrodef>
+
+    <macrodef name="exec-npm">
+        <attribute name="module"/>
+        <attribute name="directory" default="${basedir}"/>
+        <attribute name="failonerror" default="true"/>
+
+        <sequential>
+            <exec executable="npm" dir="@{directory}" resultproperty="result" outputproperty="log">
+                <arg value="@{module}"/>
+            </exec>
+
+            <echo message="${log}"/>
+            <condition property="onSuccess">
+                <and>
+                    <equals arg1="@{failonerror}" arg2="true" casesensitive="false"/>
+                    <equals arg1="${result}" arg2="0" casesensitive="false"/>
+                </and>
+            </condition>
+            <fail message="Npm failed!" unless="onSuccess"/>
         </sequential>
     </macrodef>
 </project>
