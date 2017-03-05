@@ -89,6 +89,7 @@
         <attribute name="rebuildTest" default="true"/>
         <attribute name="projectType" default="java-default"/>
         <attribute name="workDir" default="."/>
+        <attribute name="maxmemory" default=""/>
 
         <element name="fs" optional="true"/>
 
@@ -101,7 +102,7 @@
                 </innerFs>
             </do-compile-test>
 
-            <junit printsummary="yes" showoutput="yes" haltonfailure="yes" fork="yes" dir="@{workDir}">
+            <junit maxmemory="@{maxmemory}" printsummary="yes" showoutput="yes" haltonfailure="yes" fork="yes" dir="@{workDir}">
                 <classpath>
                     <pathelement path="@{target}"/>
                     <pathelement path="@{testTarget}"/>
