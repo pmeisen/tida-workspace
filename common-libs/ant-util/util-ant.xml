@@ -101,7 +101,7 @@
                 </innerFs>
             </do-compile-test>
 
-            <junit printsummary="yes" haltonfailure="yes" fork="yes" dir="@{workDir}">
+            <junit printsummary="yes" showoutput="yes" haltonfailure="yes" fork="yes" dir="@{workDir}">
                 <classpath>
                     <pathelement path="@{target}"/>
                     <pathelement path="@{testTarget}"/>
