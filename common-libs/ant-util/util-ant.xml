@@ -89,7 +89,7 @@
         <attribute name="rebuildTest" default="true"/>
         <attribute name="projectType" default="java-default"/>
         <attribute name="workDir" default="."/>
-        <attribute name="maxmemory" default=""/>
+        <attribute name="maxmemory" default="128M"/>
 
         <element name="fs" optional="true"/>
 
