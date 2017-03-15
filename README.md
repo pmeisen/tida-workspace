@@ -1,4 +1,4 @@
-#IntelliJ Workspace for the Time Interval Data Analyzer Information System (TIDA)
+# IntelliJ Workspace for the Time Interval Data Analyzer Information System (TIDA)
 
 This repository contains the workspace for the Time Interval Data Analyzer. The TIDA system is mentioned in the book [Time Interval Data Analysis](https://www.amazon.com/Analyzing-Time-Interval-Data-Introducing/dp/3658157275).
 For further insights regarding the provided analytical capacities of the TIDA system, the used TIDAModel and TIDAQueryLanguage have a look at the book or at the following research papers:
